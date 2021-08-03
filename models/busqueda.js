@@ -17,6 +17,14 @@ class Busquedas{
             };
     }
 
+    get paramsApiOpenWeather(){
+        return {
+            'appid': process.env.OPENWEATHERMAP_KEY,
+            'units': 'metric',
+            'lang': 'es'
+        }
+    }
+
     async ciudad(lugar = ''){
         //peticion http
         //console.log('ciudad', lugar);
@@ -24,10 +32,11 @@ class Busquedas{
             const instancia = axios.create({
                 baseURL: `https://api.mapbox.com/geocoding/v5/mapbox.places/${lugar}.json`,
                 params: this.paramsMapbox,
-                timeout: 2000
+                timeout: 2000,
             });
 
             const resp = await instancia.get();
+            //console.log(resp);
             
             return resp.data.features.map(lugar => ({
                 id:lugar.id,
@@ -40,7 +49,35 @@ class Busquedas{
         }
     }
 
-    
+    async climaLugar(lat, lon){
+        try{
+
+            const instancia = axios.create({
+                baseURL: `https://api.openweathermap.org/data/2.5/weather`,
+                params: { ... this.paramsApiOpenWeather, lat, lon },
+                //the same as {appid= this.appid, units= this.units, lang= this.lang, lat=lat, lon=lon}
+                timeout: 2000,
+            });
+
+            const resp = await instancia.get();
+            
+            return {
+                temp: resp.data.main.temp,
+                min: resp.data.main.temp_min,
+                max: resp.data.main.temp_max,
+                sensTerm: resp.data.main.feels_like,
+                desc: resp.data.weather[0].description,
+            };
+            
+
+        }catch(err)
+        {
+            console.log(err);
+            return [];
+        }
+    }
+
+
 }
 
 
