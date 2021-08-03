@@ -1,0 +1,17 @@
+{
+  "name": "05-clima-app",
+  "version": "0.0.1",
+  "description": "App de consola para elejir ciudad y retornar su clima actual",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Nicolas Huerta",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "colors": "^1.4.0",
+    "dotenv": "^10.0.0",
+    "inquirer": "^8.1.2"
+  }
+}
