@@ -1,14 +1,18 @@
 # Weather - App NodeJS
 
-Este es un proyecto nodejs, aplicacion de consola para buscar un lugar geografico por nombre y retornar su clima.
-Autor Nicolas Huerta
+This is a nodejs proyect, console app that search a geographic place as string and return the weather.\
+Author: Nicolas Huerta
 
 ### Notas:
 
-Reconstruir los modulos de node
-Agregar api keys en .env
-Output historial en ./db
+Rebuild nodejs modules\
+Add api-keys --> .env\
+Output record --> ./db\
+Lang: Esp 
 
+
+
+Use:
 ```
 npm install
 npm start

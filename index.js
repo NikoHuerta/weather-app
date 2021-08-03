@@ -42,6 +42,7 @@ const main = async () => {
                 console.log(`Lat: ${lat}`);
                 console.log(`Lng: ${lng}`);
 
+                
                 console.log(`Temperatura: ${temp}`);
                 console.log(`Mínima: ${min}`);
                 console.log(`Máxima: ${max}`);

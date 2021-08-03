@@ -17,6 +17,7 @@ class Busquedas{
 
             let palabras = lugar.split(' ');
             palabras = palabras.map(p => p[0].toLocaleUpperCase() + p.substring(1));
+
             
             return palabras.join(' ');
         });
