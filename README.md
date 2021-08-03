@@ -3,7 +3,7 @@
 This is a nodejs proyect, console app that search a geographic place as string and return the weather.\
 Author: Nicolas Huerta
 
-### Notas:
+### Notes:
 
 Rebuild nodejs modules\
 Add api-keys --> .env\
