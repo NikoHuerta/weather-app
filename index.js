@@ -8,7 +8,7 @@ const main = async () => {
 
     const busquedas = new Busquedas();
     let opt = '';
-
+    const archivoHistorial = busquedas.leerDB();
 
     do{
         opt = await inquirerMenu(); //espera a que termine la ejecucion, la promesa.
@@ -22,31 +22,39 @@ const main = async () => {
 
                 //seleccionar el lugar
                 const idSelected = await listarLugares(lugares);
-                //console.log(idSelected);
+                if(idSelected === '0') continue; //--> continuar la ejecucion del ciclo
+
+                //guardar en db
                 const lugarSel = lugares.find(l => l.id === idSelected);
-                //console.log(lugarSel);
+                busquedas.agregarHistorial(lugarSel.nombre);
 
                 //rescatar info clima
                 const clima = await busquedas.climaLugar(lugarSel.lat, lugarSel.lng);
-                //console.log(clima);
 
+                //desestructurar objetos
+                const { nombre, lat, lng } = lugarSel;
+                const { desc, temp, min, max, sensTerm } = clima;
 
                 //mostrar resultados
+                console.clear();
                 console.log(colors.green('\nInformación de la ciudad\n'));
-                console.log(`Ciudad: ${lugarSel.nombre}`);
-                console.log(`Lat: ${lugarSel.lat}`);
-                console.log(`Lng: ${lugarSel.lng}`);
+                console.log(`Ciudad: ${colors.green(nombre)}`);
+                console.log(`Lat: ${lat}`);
+                console.log(`Lng: ${lng}`);
 
-                console.log(`Tiempo: ${clima.desc}`);
-                console.log(`Temperatura: ${clima.temp}`);
-                console.log(`Mínima: ${clima.min}`);
-                console.log(`Máxima: ${clima.max}`);
-                console.log(`Sensación termica: ${clima.sensTerm}`);
+                console.log(`Temperatura: ${temp}`);
+                console.log(`Mínima: ${min}`);
+                console.log(`Máxima: ${max}`);
+                console.log(`Sensación termica: ${sensTerm}`);
+                console.log(`Tiempo: ${colors.green(desc)}`);
 
             break;
 
             case 2:
                 console.log('Historial de busqueda, selected');
+                busquedas.historialCapitalizado.forEach((lugar, idx) => {
+                    console.log(`${colors.green((idx+1)+'. ')} ${ lugar }`);
+                });
             break;
         }
         if(opt !== 0) await pausa();

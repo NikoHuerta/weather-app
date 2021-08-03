@@ -1,12 +1,25 @@
+const fs = require('fs');
+
 const axios = require('axios');
 
 
 class Busquedas{
 
-    historial = ['Tegucigalpa','Madrid','Santiago'];
+    historial = [];
+    dbPath = './db/database.json';
 
     constructor(){
         //TODO: leer DB si existe
+    }
+    
+    get historialCapitalizado(){
+        return this.historial.map(lugar => {
+
+            let palabras = lugar.split(' ');
+            palabras = palabras.map(p => p[0].toLocaleUpperCase() + p.substring(1));
+            
+            return palabras.join(' ');
+        });
     }
 
     get paramsMapbox(){
@@ -60,13 +73,14 @@ class Busquedas{
             });
 
             const resp = await instancia.get();
+            const { weather, main } = resp.data;
             
             return {
-                temp: resp.data.main.temp,
-                min: resp.data.main.temp_min,
-                max: resp.data.main.temp_max,
-                sensTerm: resp.data.main.feels_like,
-                desc: resp.data.weather[0].description,
+                desc: weather[0].description,
+                temp: main.temp,
+                min: main.temp_min,
+                max: main.temp_max,
+                sensTerm: main.feels_like,
             };
             
 
@@ -75,6 +89,30 @@ class Busquedas{
             console.log(err);
             return [];
         }
+    }
+
+    agregarHistorial(lugar = ''){
+        //validar si ya existe
+        if( this.historial.includes( lugar.toLocaleLowerCase() ) ) return;
+
+        if(this.historial.length == 5) this.historial.pop();
+
+        this.historial.unshift( lugar.toLocaleLowerCase() );
+        //guardarDB
+        this.guardarDB();
+    }
+
+    guardarDB(){
+        const payload = {
+            historial: this.historial,
+        };
+        fs.writeFileSync(this.dbPath, JSON.stringify(payload));
+    }
+
+    leerDB(){
+        if(!fs.existsSync(this.dbPath)) return [];
+        const infoHistorial = fs.readFileSync(this.dbPath, 'utf-8');
+        this.historial = JSON.parse(infoHistorial).historial;
     }
 
 
