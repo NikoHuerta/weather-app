@@ -75,10 +75,39 @@ const confirmar = async (message) => {
 };
 
 
+const listarLugares = async (lugares = []) => {
+   
+    const choices = lugares.map((lugar, i) => {
+        const idx = `${colors.green((i+1) +'. ')}`;
+        return {
+            value: lugar.id,
+            name: `${ idx } ${lugar.nombre}`
+        }
+    });
+
+    choices.unshift({
+        value: '0',
+        name: colors.green('0.') + '  Cancelar'
+    });
+    
+    const preguntasLugar = [{
+        type: 'list',
+        name: 'id',
+        message: 'Seleccione lugar:',
+        choices
+    }];
+
+    const { id } = await inquirer.prompt(preguntasLugar);
+    return id;
+
+};
+
+
 
 module.exports = {
     inquirerMenu,
     pausa,
     leerInput,
     confirmar,
+    listarLugares,
 }

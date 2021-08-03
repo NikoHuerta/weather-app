@@ -27,16 +27,20 @@ class Busquedas{
                 timeout: 2000
             });
 
-            // const resp = await axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/santiago.json?access_token=pk.eyJ1Ijoibmh1ZXJ0YSIsImEiOiJja3J2NXhsamQwM2h2Mndta3N5bDl5cnR5In0.Pi7v2LSt72OKUkLerywa9w&limit=5&language=es');
             const resp = await instancia.get();
-            console.log(resp.data);
-
-            return []; //retornar los lugares
+            
+            return resp.data.features.map(lugar => ({
+                id:lugar.id,
+                nombre: lugar.place_name,
+                lng: lugar.center[0],
+                lat: lugar.center[1],
+            }));
         }catch(err){
             return [];
         }
-        
     }
+
+    
 }
 
 
